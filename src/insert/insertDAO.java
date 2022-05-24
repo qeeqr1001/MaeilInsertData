@@ -26,7 +26,7 @@ public class insertDAO extends GUI {
 	public static boolean create(DTO dto) throws Exception{
 		
 		try{ //DB연결 후 DB에서 word데이터 가져오기.
-       	 System.out.println("Connect 시작");
+       	
 
        	  Class.forName("com.mysql.jdbc.Driver");
    			conn = DriverManager.getConnection(url, user, password);
