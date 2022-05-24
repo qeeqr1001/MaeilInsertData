@@ -1,8 +1,22 @@
 package insert;
 import java.sql.*;
+import java.util.ArrayList;
+
 import com.mysql.jdbc.*;
 import java.awt.*;
 public class insertDAO extends GUI {
+	  public static ArrayList<String> worddic = new ArrayList<String>();		
+	  public boolean overlap;
+
+	    public static String user = "dosly2";
+	    public static String password = "maeil123";
+	    public static String url = "jdbc:mysql://dosly2.cafe24.com/dosly2?useUnicode=true&serverTimezone=Asia/Seoul&autoReconnect=true";
+	  
+	    public static Connection conn=null;
+	    public static Statement state=null;
+	    
+
+
 
 	public insertDAO(String str) {
 		super(str);
@@ -11,6 +25,54 @@ public class insertDAO extends GUI {
 
 	public static boolean create(DTO dto) throws Exception{
 		
+		try{ //DB연결 후 DB에서 word데이터 가져오기.
+       	 System.out.println("Connect 시작");
+
+       	  Class.forName("com.mysql.jdbc.Driver");
+   			conn = DriverManager.getConnection(url, user, password);
+   			state = conn.createStatement();
+   			String sql; //SQL문을 저장할 String
+   			String sql2;
+   		
+   			sql2="SELECT * FROM word";
+   			ResultSet rs = state.executeQuery(sql2); //SQL문을 전달하여 실행
+   			
+
+   			 			
+   			    while(rs.next()){
+   					String content = rs.getString("word_content");
+   					worddic.add(content);
+   					
+   					
+   				}
+   			    
+   			    
+   				rs.close();
+   				state.close();
+   				conn.close();
+   			} catch(Exception e){
+   				e.printStackTrace();
+   						//예외 발생 시 처리부분
+
+   			} finally { //예외가 있든 없든 무조건 실행
+   				try{
+   					if(state!=null)
+   						state.close();
+   				}catch(SQLException ex1){
+   					//
+   				}
+   						
+   				try{
+   					if(conn!=null)
+   						conn.close();
+   				}catch(SQLException ex1){
+   					//
+   				}
+   			}
+       
+     
+		
+	
 		boolean flag=false;
 		Connection con = null; 
 	    Statement state = null; 
@@ -46,20 +108,48 @@ public class insertDAO extends GUI {
     			state2.executeUpdate(sql2);
     			for (int i=0;i<wordf.length;i++) {
     				String fword_content=wordf[i];
-    				dto.setWord(fword_content);
+    				
     				int fword_id=word_id+i;
-    				dto.setWordId(fword_id);
+		    		dto.setWordId(fword_id);
+    				int ffword_id=0;
+
+    				
+    				int count=0;
+    		    	
+    		    		
+    		    	for (int j=0;j<worddic.size();j++) {
+    		    		if (fword_content.equals(worddic.get(j))==true) {
+    		    	
+    		    			ffword_id=j;
+    		    			count+=1;
+    		    		}
+    		    		else {continue;}
+    		    	}
+    		    	if (count==0) {
+    		    				
+    		    			String sql3="INSERT INTO word(word_id,word_content) VALUES('"+fword_id+"','"+fword_content+"')";
+    	    				state3=(Statement)con.createStatement();
+    	    				state3.executeUpdate(sql3);
+    	    				String sql4="INSERT INTO connect(connect_questid,connect_wordid) VALUES('"+quest_id+"','"+fword_id+"')";
+    	    				state4=(Statement)con.createStatement();
+    	    				state4.executeUpdate(sql4);
+    		    				}
+    		    	else {
+    		    		fword_id=fword_id-1;
+    		    		String sql4="INSERT INTO connect(connect_questid,connect_wordid) VALUES('"+quest_id+"','"+ffword_id+"')";
+    		    		state4=(Statement)con.createStatement();
+    		    		state4.executeUpdate(sql4);
+    		    		
+    		    				
+    		    				
+    		    			
+    		    		}
+    		    	}
+    		    			
+    		    			
+    				
+    				
     			
-    				String sql3="INSERT INTO word(word_id,word_content) VALUES('"+fword_id+"','"+fword_content+"')";
-    				state3=(Statement)con.createStatement();
-    				state3.executeUpdate(sql3);	
-    				String sql4="INSERT INTO connect(connect_questid,connect_wordid) VALUES('"+quest_id+"','"+fword_id+"')";
-    				state4=(Statement)con.createStatement();
-    				state4.executeUpdate(sql4);	
-    			}
-    		 
-  
-    	
     			flag=true;
     			 
     			} catch(Exception e){
@@ -83,6 +173,14 @@ public class insertDAO extends GUI {
     			}
         return flag;
 	}
+    			
+	    
 	
-}
+	    
+	    
+	 
+	 
+	        
+	}
+
 
