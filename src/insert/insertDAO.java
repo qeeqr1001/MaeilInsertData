@@ -15,7 +15,7 @@ public class insertDAO extends GUI {
 	    public static Connection conn=null;
 	    public static Statement state=null;
 	    
-
+	    public static ArrayList<Integer> countdic = new ArrayList<Integer>();	
 
 
 	public insertDAO(String str) {
@@ -110,11 +110,11 @@ public class insertDAO extends GUI {
     				String fword_content=wordf[i];
     				
     				int fword_id=word_id+i;
-		    		dto.setWordId(fword_id);
+		    		
     				int ffword_id=0;
 
-    				
     				int count=0;
+    				
     		    	
     		    		
     		    	for (int j=0;j<worddic.size();j++) {
@@ -122,11 +122,20 @@ public class insertDAO extends GUI {
     		    	
     		    			ffword_id=j;
     		    			count+=1;
+    		    			countdic.add(count);
+    		    			
     		    		}
-    		    		else {continue;}
+    		    		
     		    	}
+    		    	if (count!=0) {
+		    			
+		    			System.out.println(countdic.size());
+		    		}
+		    		
     		    	if (count==0) {
-    		    				
+    		    			fword_id=fword_id-countdic.size();
+    		    			System.out.println(countdic.size());
+    		    			dto.setWordId(fword_id);
     		    			String sql3="INSERT INTO word(word_id,word_content) VALUES('"+fword_id+"','"+fword_content+"')";
     	    				state3=(Statement)con.createStatement();
     	    				state3.executeUpdate(sql3);
@@ -135,7 +144,8 @@ public class insertDAO extends GUI {
     	    				state4.executeUpdate(sql4);
     		    				}
     		    	else {
-    		    		fword_id=fword_id-1;
+    		    		
+    		    		
     		    		String sql4="INSERT INTO connect(connect_questid,connect_wordid) VALUES('"+quest_id+"','"+ffword_id+"')";
     		    		state4=(Statement)con.createStatement();
     		    		state4.executeUpdate(sql4);
