@@ -44,10 +44,22 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		Label word=new Label("질문 핵심 단어");
 		Label wordid=new Label("단어 시작 아이디");
 		Label answer=new Label("답변 내용");
+		
+		Font font= new Font("굴림 보통",Font.PLAIN,20);
+		
+		id.setFont(font);
+		content.setFont(font);
+		word.setFont(font);
+		wordid.setFont(font);
+		answer.setFont(font);
+		
 		b1=new JButton ("전송");
 		b1.addActionListener(this); 
 		b2=new JButton ("리셋");
 		b2.addActionListener(this);
+		
+		b1.setFont(font);
+		b2.setFont(font);
 		
 		quest_id=new TextField(20);
 		quest_content=new TextArea(5,20);
@@ -68,6 +80,8 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		
 		p.add(answer);
 		p.add(ans_content);
+		
+		
 		
 		bp.add(b1);
 		bp.add(b2);
