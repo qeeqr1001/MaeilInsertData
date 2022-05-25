@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,9 +18,11 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 	TextField word_id;
 	TextField word_content;
 	TextArea ans_content;
-	Button b1; 
+	JButton b1; 
+	JButton b2;
 	public static String[] wordf;
 	
+	private boolean is;
 	public GUI(String str) {
 		super(str);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,14 +37,17 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 	}
 	public void init() {
 		Panel p=new Panel();
+		Panel bp=new Panel();
 		setLayout(new BorderLayout());
 		Label id=new Label("질문/답변 아이디");
 		Label content=new Label("질문 내용");
 		Label word=new Label("질문 핵심 단어");
 		Label wordid=new Label("단어 시작 아이디");
 		Label answer=new Label("답변 내용");
-		b1=new Button ("전송");
+		b1=new JButton ("전송");
 		b1.addActionListener(this); 
+		b2=new JButton ("리셋");
+		b2.addActionListener(this);
 		
 		quest_id=new TextField(20);
 		quest_content=new TextArea(5,20);
@@ -62,28 +68,34 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		
 		p.add(answer);
 		p.add(ans_content);
+		
+		bp.add(b1);
+		bp.add(b2);
 		add("Center",p);
-		add("South",b1);
+		add("South",bp);
+
 		
 	}
 
 	public static void main(String[] args) {
 	
 		GUI Quest=new GUI("데이터 입력");
+
 	}
 
 	@Override
 	public void run() {
-		
-		
+		   
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj=e.getSource();
 		
-	
-		if ((Button)obj==b1) {
+
+		if ((JButton)obj==b1) {
+
+		
 			dto.setId(quest_id.getText()); 
 			dto.setContent(quest_content.getText());
 		
@@ -104,17 +116,30 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 			dto.setText(ans_content.getText());
 			try {
 				insertDAO.create(dto); 
+
+				
 				
 			}catch(Exception e1) {
 				e1.printStackTrace();
 			}
+			
 		}
-		
+		else if ((JButton)obj==b2) {
+			quest_id.setText("");
+			quest_content.setText("");
+			word_id.setText("");
+			word_content.setText("");
+			ans_content.setText("");
+
+
+		}
 	}
+		
+
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
