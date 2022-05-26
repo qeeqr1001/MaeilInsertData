@@ -36,8 +36,8 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		
 	}
 	public void init() {
-		Panel p=new Panel();
-		Panel bp=new Panel();
+		Panel p=new Panel(); 
+		Panel bp=new Panel(); //버튼 패널
 		setLayout(new BorderLayout());
 		Label id=new Label("질문/답변 아이디");
 		Label content=new Label("질문 내용");
@@ -45,7 +45,7 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		Label wordid=new Label("단어 시작 아이디");
 		Label answer=new Label("답변 내용");
 		
-		Font font= new Font("굴림 보통",Font.PLAIN,20);
+		Font font= new Font("함초롱바탕 보통",Font.BOLD,18);
 		
 		id.setFont(font);
 		content.setFont(font);
@@ -54,7 +54,7 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 		answer.setFont(font);
 		
 		b1=new JButton ("전송");
-		b1.addActionListener(this); 
+		b1.addActionListener(this);
 		b2=new JButton ("리셋");
 		b2.addActionListener(this);
 		
@@ -104,10 +104,10 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object obj=e.getSource();
+		Object obj=e.getSource(); //버튼 판별.
 		
 
-		if ((JButton)obj==b1) {
+		if ((JButton)obj==b1) { //전송버튼 누를시 데이터베이스에 값 저장.
 
 		
 			dto.setId(quest_id.getText()); 
@@ -119,7 +119,7 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 	
 			wordf = word_content.getText().split(",");
 			
-			for (int i=0;i<wordf.length;i++) {
+			for (int i=0;i<wordf.length;i++) { //단어+단어 아이디는 ,를 기준으로 나누어 반복문 이용해 저장.
 				dto.setWord(wordf[i]);
 				
 				dto.setWordId(Integer.parseInt(word_id.getText()));
@@ -128,7 +128,7 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 			}
 
 			dto.setText(ans_content.getText());
-			try {
+			try { 
 				insertDAO.create(dto); 
 
 				
@@ -138,7 +138,7 @@ public class GUI extends JFrame implements ActionListener, ItemListener,Runnable
 			}
 			
 		}
-		else if ((JButton)obj==b2) {
+		else if ((JButton)obj==b2) {  //리셋버튼 누르면 초기화.
 			quest_id.setText("");
 			quest_content.setText("");
 			word_id.setText("");
